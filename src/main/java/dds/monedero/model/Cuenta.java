@@ -28,9 +28,13 @@ public class Cuenta {
     this.extracciones= extracciones;
   }
 
+  public long cantidadDepositosEnLaFecha(LocalDate fecha) {
+	  return getDepositos().stream().filter(deposito -> deposito.esDeLaFecha(fecha)).count();
+  }
+  
   public void poner(double cuanto) {
 	  
-    if (getDepositos().stream().filter(deposito -> deposito.esDeLaFecha(LocalDate.now())).count() >= 3) {
+    if (cantidadDepositosEnLaFecha(LocalDate.now()) >= 3) {
       throw new MaximaCantidadDepositosException("Ya excedio los " + 3 + " depositos diarios");
     }
   
