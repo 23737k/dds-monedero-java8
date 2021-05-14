@@ -59,21 +59,21 @@ public class Cuenta {
   
 
   private void agregarDeposito(LocalDate fecha, double cuanto) {
-	setSaldo(this.saldo+cuanto);
     Deposito deposito = new Deposito(fecha, cuanto);
+    deposito.setSaldo(this);
     depositos.add(deposito);
     
   }
   
   private void agregarExtraccion(LocalDate fecha, double cuanto) {
-	    Extraccion extraccion = new Extraccion(fecha, cuanto);
-	    setSaldo(this.saldo-cuanto);
+	  Extraccion extraccion = new Extraccion(fecha, cuanto);
+	    extraccion.setSaldo(this);
 	    extracciones.add(extraccion);
-	  }
+  }
 
   public double getMontoExtraidoA(LocalDate fecha) {
     return getExtracciones().stream()
-        .filter(extraccion -> extraccion.getFecha().equals(fecha))
+        .filter(extraccion -> extraccion.esDeLaFecha(fecha))
         .mapToDouble(Movimiento::getMonto)
         .sum();
   }

@@ -24,6 +24,8 @@ public abstract class Movimiento {
   public boolean esDeLaFecha(LocalDate fecha) {
 	    return this.fecha.equals(fecha);
 	  }
+  
+  public abstract void setSaldo(Cuenta cuenta);
 }
 
 
@@ -35,11 +37,12 @@ class Extraccion extends Movimiento{
 		super(fecha, monto);
 	}
 	
-	public boolean fueExtraido(LocalDate fecha) {
-	    return esDeLaFecha(fecha);
-	  }
+	@Override
+	public void setSaldo(Cuenta cuenta) {
+		Double saldoAnterior= cuenta.getSaldo();
+		cuenta.setSaldo(saldoAnterior-getMonto());
+	}
 }
-
 
 
 
@@ -50,8 +53,10 @@ class Deposito extends Movimiento{
 		super(fecha, monto);
 	}
 	
-	public boolean fueDepositado(LocalDate fecha) {
-	    return esDeLaFecha(fecha);
-	  }
+	@Override
+	public void setSaldo(Cuenta cuenta) {
+		Double saldoAnterior= cuenta.getSaldo();
+		cuenta.setSaldo(saldoAnterior+getMonto());
+	}
 }
 
