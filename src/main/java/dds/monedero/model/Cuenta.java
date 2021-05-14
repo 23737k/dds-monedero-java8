@@ -36,8 +36,7 @@ public class Cuenta {
     if (getDepositos().stream().filter(deposito -> deposito.esDeLaFecha(LocalDate.now())).count() >= 3) {
       throw new MaximaCantidadDepositosException("Ya excedio los " + 3 + " depositos diarios");
     }
-
-    new Deposito(LocalDate.now(), cuanto).agregateA(this);
+    agregarDeposito(LocalDate.now(),cuanto);
   }
 
   public void sacar(double cuanto) {
@@ -53,16 +52,22 @@ public class Cuenta {
       throw new MaximoExtraccionDiarioException("No puede extraer mas de $ " + 1000
           + " diarios, límite: " + limite);
     }
-    new Extraccion(LocalDate.now(), cuanto).agregateA(this);
-  }
-
-  public void agregarDeposito(LocalDate fecha, double cuanto) {
-    Deposito deposito = new Deposito(fecha, cuanto);
-    depositos.add(deposito);
+    
+    agregarExtraccion(LocalDate.now(),cuanto);
+    
   }
   
-  public void agregarExtraccion(LocalDate fecha, double cuanto) {
+
+  private void agregarDeposito(LocalDate fecha, double cuanto) {
+	setSaldo(this.saldo+cuanto);
+    Deposito deposito = new Deposito(fecha, cuanto);
+    depositos.add(deposito);
+    
+  }
+  
+  private void agregarExtraccion(LocalDate fecha, double cuanto) {
 	    Extraccion extraccion = new Extraccion(fecha, cuanto);
+	    setSaldo(this.saldo-cuanto);
 	    extracciones.add(extraccion);
 	  }
 
