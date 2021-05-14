@@ -3,10 +3,10 @@ package dds.monedero.model;
 import java.time.LocalDate;
 
 public abstract class Movimiento {
-  private LocalDate fecha;
+  protected LocalDate fecha;
   //En ningún lenguaje de programación usen jamás doubles para modelar dinero en el mundo real
   //siempre usen numeros de precision arbitraria, como BigDecimal en Java y similares
-  private double monto;
+  protected double monto;
  
   public Movimiento(LocalDate fecha, double monto) {
     this.fecha = fecha;
@@ -27,14 +27,24 @@ public abstract class Movimiento {
   
   public void agregateA(Cuenta cuenta) {
 	    cuenta.setSaldo(calcularValor(cuenta));
-	    cuenta.agregarMovimiento(fecha, monto);
 	  }
   
   public abstract double calcularValor(Cuenta cuenta);
   
 }
 
+
+
+
 class Extraccion extends Movimiento{
+	
+	
+	@Override
+	public void agregateA(Cuenta cuenta) {
+		super(cuenta);
+		cuenta.agregarDeposito(fecha, monto);
+	  }
+  
 	
 	public Extraccion(LocalDate fecha, double monto) {
 		super(fecha, monto);
@@ -48,6 +58,8 @@ class Extraccion extends Movimiento{
 	    return esDeLaFecha(fecha);
 	  }
 }
+
+
 
 
 
